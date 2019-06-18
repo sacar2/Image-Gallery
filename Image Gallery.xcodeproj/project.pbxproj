@@ -8,22 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		6AB773DA228B38440038B8BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB773D9228B38440038B8BB /* AppDelegate.swift */; };
-		6AB773DC228B38440038B8BB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB773DB228B38440038B8BB /* ViewController.swift */; };
 		6AB773DF228B38440038B8BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AB773DD228B38440038B8BB /* Main.storyboard */; };
 		6AB773E1228B38460038B8BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AB773E0228B38460038B8BB /* Assets.xcassets */; };
 		6AB773E4228B38460038B8BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AB773E2228B38460038B8BB /* LaunchScreen.storyboard */; };
 		6AB773F3228B3A2D0038B8BB /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB773F2228B3A2C0038B8BB /* Utilities.swift */; };
+		6AC225CC22B93C0A00F600BC /* UIImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC225CB22B93C0A00F600BC /* UIImageCollectionViewController.swift */; };
+		6AC225CE22B9474600F600BC /* ImageGalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC225CD22B9474600F600BC /* ImageGalleryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6AB773D6228B38440038B8BB /* Image Gallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Image Gallery.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AB773D9228B38440038B8BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6AB773DB228B38440038B8BB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		6AB773DE228B38440038B8BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6AB773E0228B38460038B8BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6AB773E3228B38460038B8BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6AB773E5228B38460038B8BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AB773F2228B3A2C0038B8BB /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		6AC225CB22B93C0A00F600BC /* UIImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewController.swift; sourceTree = "<group>"; };
+		6AC225CD22B9474600F600BC /* ImageGalleryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +58,10 @@
 		6AB773D8228B38440038B8BB /* Image Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				6AC225CB22B93C0A00F600BC /* UIImageCollectionViewController.swift */,
+				6AC225CD22B9474600F600BC /* ImageGalleryTableViewController.swift */,
+				6AB773E5228B38460038B8BB /* Info.plist */,
 				6AB773F2228B3A2C0038B8BB /* Utilities.swift */,
-				6AB773DB228B38440038B8BB /* ViewController.swift */,
 				6AB773DD228B38440038B8BB /* Main.storyboard */,
 				6AB773EF228B39880038B8BB /* Supporting Files */,
 			);
@@ -70,7 +74,6 @@
 				6AB773D9228B38440038B8BB /* AppDelegate.swift */,
 				6AB773E0228B38460038B8BB /* Assets.xcassets */,
 				6AB773E2228B38460038B8BB /* LaunchScreen.storyboard */,
-				6AB773E5228B38460038B8BB /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -146,9 +149,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AC225CC22B93C0A00F600BC /* UIImageCollectionViewController.swift in Sources */,
 				6AB773F3228B3A2D0038B8BB /* Utilities.swift in Sources */,
-				6AB773DC228B38440038B8BB /* ViewController.swift in Sources */,
 				6AB773DA228B38440038B8BB /* AppDelegate.swift in Sources */,
+				6AC225CE22B9474600F600BC /* ImageGalleryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
