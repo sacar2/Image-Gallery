@@ -10,7 +10,9 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class UIImageCollectionViewController: UICollectionViewController {
+class UIImageCollectionViewController: UICollectionViewController, UIDropInteractionDelegate {
+
+    var imageFetcher: ImageFetcher!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +23,35 @@ class UIImageCollectionViewController: UICollectionViewController {
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
-        // Do any additional setup after loading the view.
+        self.collectionView!.addInteraction(UIDropInteraction(delegate: self))
     }
 
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        imageFetcher = ImageFetcher(){ (url, image) in
+            DispatchQueue.main.async{
+                
+            }
+        }
+        
+        session.loadObjects(ofClass: NSURL.self){nsurls in
+            if let url = nsurls.first as? URL{
+                self.imageFetcher.fetch(url)
+            }
+        }
+        session.loadObjects(ofClass: UIImage.self){images in
+            if let image = images.first{
+                self.imageFetcher.backup = image as? UIImage
+            }
+        }
+    }
     /*
     // MARK: - Navigation
 
@@ -37,8 +65,7 @@ class UIImageCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
 
 

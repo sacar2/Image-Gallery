@@ -10,11 +10,13 @@ import UIKit
 
 class ImageGalleryTableViewController: UITableViewController {
 
-    var imageGalleries =  ["MyImageGallery"]
-    var deletedImageGalleries: [String] = []
+    var data = ImageGalleryData()
+    
     
     @IBAction func newImageGallery(_ sender: Any) {
-        imageGalleries += ["New Image Gallery".madeUnique(withRespectTo: imageGalleries)]
+        let imageGallerytitles = data.imageGalleries.map{$0.title}
+        let newTitle = "Image Gallery".madeUnique(withRespectTo: imageGallerytitles)
+        data.imageGalleries.append( ImageGallery(title: newTitle) )
         tableView.reloadData()
     }
     
@@ -25,12 +27,12 @@ class ImageGalleryTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return imageGalleries.count
+        return data.imageGalleries.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath)
-        cell.textLabel?.text = imageGalleries[indexPath.row]
+        cell.textLabel?.text = data.imageGalleries[indexPath.row].title
         return cell
     }
    
@@ -46,7 +48,7 @@ class ImageGalleryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            imageGalleries.remove(at: indexPath.row)
+            data.imageGalleries.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
