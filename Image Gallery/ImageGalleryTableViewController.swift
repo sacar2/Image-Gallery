@@ -10,11 +10,11 @@ import UIKit
 
 class ImageGalleryTableViewController: UITableViewController {
 
-    var data = ImageGalleryData()
+    var data = ImageGalleryData.shared()
     
     
     @IBAction func newImageGallery(_ sender: Any) {
-        let imageGallerytitles = data.imageGalleries.map{$0.title}
+        let imageGallerytitles = data.getImageGalleryTitles()
         let newTitle = "Image Gallery".madeUnique(withRespectTo: imageGallerytitles)
         data.imageGalleries.append( ImageGallery(title: newTitle) )
         tableView.reloadData()
@@ -36,6 +36,9 @@ class ImageGalleryTableViewController: UITableViewController {
         return cell
     }
    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        data.currentGallery = indexPath.row
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -70,7 +73,6 @@ class ImageGalleryTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -78,6 +80,5 @@ class ImageGalleryTableViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
 
 }

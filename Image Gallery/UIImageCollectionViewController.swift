@@ -12,6 +12,7 @@ private let reuseIdentifier = "Cell"
 
 class UIImageCollectionViewController: UICollectionViewController, UIDropInteractionDelegate {
 
+    var data = ImageGalleryData.shared()
     var imageFetcher: ImageFetcher!
 
     override func viewDidLoad() {

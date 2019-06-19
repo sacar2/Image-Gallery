@@ -9,6 +9,22 @@
 import Foundation
 
 class ImageGalleryData{
+    private static var sharedImageGalleryData: ImageGalleryData?
     var imageGalleries: [ImageGallery] = []
-    var deletedImageGalleries: [ImageGallery] = []
+    private(set) var deletedImageGalleries: [ImageGallery] = []
+    var currentGallery: Int?
+    
+    private init() {
+    }
+    
+    static func shared() -> ImageGalleryData {
+        if sharedImageGalleryData == nil {
+            sharedImageGalleryData = ImageGalleryData()
+        }
+        return sharedImageGalleryData!
+    }
+    
+    func getImageGalleryTitles() -> [String]{
+        return imageGalleries.map{$0.title}
+    }
 }
