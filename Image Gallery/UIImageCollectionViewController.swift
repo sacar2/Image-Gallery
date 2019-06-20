@@ -76,10 +76,11 @@ class UIImageCollectionViewController: UICollectionViewController, UIDropInterac
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
-    
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
+        if let currentImageGallery = data.currentGallery{
+            let (_, imageForCell) = data.imageGalleries[currentImageGallery].images[indexPath.row]
+            cell.imageView.image = imageForCell
+        }
         return cell
     }
 
@@ -113,5 +114,7 @@ class UIImageCollectionViewController: UICollectionViewController, UIDropInterac
     
     }
     */
+    
+    
 
 }
