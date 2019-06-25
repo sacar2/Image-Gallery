@@ -8,21 +8,18 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "PhotoCell"
 
-class UIImageCollectionViewController: UICollectionViewController, UIDropInteractionDelegate {
+class UIImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate {
 
     var data = ImageGalleryData.shared()
     var imageFetcher: ImageFetcher!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         self.collectionView!.addInteraction(UIDropInteraction(delegate: self))
     }
@@ -36,20 +33,24 @@ class UIImageCollectionViewController: UICollectionViewController, UIDropInterac
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        //let imagefetcher know i want the data, let it fetch the data, then call the closure.
+        
+        //this doesnt really fetch the image yet, closure is run after the items are fetched
         imageFetcher = ImageFetcher(){ (url, image) in
             DispatchQueue.main.async{
-                
+                self.data.addImageToGallery(url: url, image: image)            
+                self.collectionView!.reloadData()
             }
         }
-        
+        //this fetches the images as a UIImage and as a URL to load
         session.loadObjects(ofClass: NSURL.self){nsurls in
             if let url = nsurls.first as? URL{
                 self.imageFetcher.fetch(url)
             }
         }
         session.loadObjects(ofClass: UIImage.self){images in
-            if let image = images.first{
-                self.imageFetcher.backup = image as? UIImage
+            if let image = images.first as? UIImage{
+                self.imageFetcher.backup = image
             }
         }
     }
@@ -72,15 +73,15 @@ class UIImageCollectionViewController: UICollectionViewController, UIDropInterac
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        var itemsInCollection = 0
+        itemsInCollection = data.imageGalleries[data.currentGallery].images.count
+        return itemsInCollection
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
-        if let currentImageGallery = data.currentGallery{
-            let (_, imageForCell) = data.imageGalleries[currentImageGallery].images[indexPath.row]
-            cell.imageView.image = imageForCell
-        }
+        let (_, imageForCell) = data.imageGalleries[data.currentGallery].images[indexPath.row]
+        cell.imageView.image = imageForCell
         return cell
     }
 

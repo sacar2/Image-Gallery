@@ -11,7 +11,7 @@ import UIKit
 struct ImageGallery{
     
     var title: String
-    var images: [(NSURL, UIImage)]
+    var images: [(URL, UIImage)]
     
     init(title: String){
         self.title = title
