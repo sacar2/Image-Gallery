@@ -32,4 +32,12 @@ class ImageGalleryData{
     func addImageToGallery(url: URL, image: UIImage){
         imageGalleries[currentGallery].images.append((url, image))
     }
+    
+    func deleteImageGallery(atIndex index: Int){
+        deletedImageGalleries.append(imageGalleries.remove(at: index))
+    }
+    
+    func permanentlyDeleteImageGallery(atIndex index: Int){
+        deletedImageGalleries.remove(at: index)
+    }
 }
