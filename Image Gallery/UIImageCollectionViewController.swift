@@ -22,6 +22,12 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
         // self.clearsSelectionOnViewWillAppear = false
 
         self.collectionView!.addInteraction(UIDropInteraction(delegate: self))
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateGalleryCollectionView), name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
+    }
+    
+    @objc func updateGalleryCollectionView(notification: NSNotification){
+        self.collectionView!.reloadData()
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {

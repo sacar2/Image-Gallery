@@ -38,6 +38,7 @@ class ImageGalleryTableViewController: UITableViewController {
    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         data.currentGallery = indexPath.row
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
     }
     /*
     // Override to support conditional editing of the table view.
