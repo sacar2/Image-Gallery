@@ -66,6 +66,19 @@ class ImageGalleryTableViewController: UITableViewController {
         return title
     }
    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //handler = UIContextualAction.Handler: The handler block to call in response to the selection of an action
+        if indexPath.section == 1{
+            let undeleteAction = UIContextualAction(style: .normal, title: "Undelete Action", handler: {(ac: UIContextualAction, view: UIView, success:(Bool) -> Void) in
+                self.data.undeleteImageGallery(atIndex: indexPath.row)
+                tableView.moveRow(at: indexPath, to: NSIndexPath(row: self.data.imageGalleries.count-1, section: 0) as IndexPath)
+                tableView.reloadData()
+                success(true)
+            })
+            return UISwipeActionsConfiguration(actions: [undeleteAction])
+        }else{ return nil }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
             data.currentGallery = indexPath.row

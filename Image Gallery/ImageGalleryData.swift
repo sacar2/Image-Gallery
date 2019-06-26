@@ -37,6 +37,10 @@ class ImageGalleryData{
         deletedImageGalleries.append(imageGalleries.remove(at: index))
     }
     
+    func undeleteImageGallery(atIndex index: Int){
+        imageGalleries.append(deletedImageGalleries.remove(at: index))
+    }
+    
     func permanentlyDeleteImageGallery(atIndex index: Int){
         deletedImageGalleries.remove(at: index)
     }
