@@ -26,7 +26,10 @@ class ImageGalleryData{
     }
     
     func getImageGalleryTitles() -> [String]{
-        return imageGalleries.map{$0.title}
+        var allTitles = imageGalleries.map{$0.title}
+        let deletedTitles = deletedImageGalleries.map{$0.title}
+        allTitles.append(contentsOf: deletedTitles)
+        return allTitles
     }
     
     func addImageToGallery(url: URL, image: UIImage){

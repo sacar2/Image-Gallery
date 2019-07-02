@@ -8,10 +8,11 @@
 
 import UIKit
 
-class ImageGalleryTableViewController: UITableViewController {
+class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegate {
 
     var data = ImageGalleryData.shared()
     
+    var currentCell: IndexPath? = nil
     
     @IBAction func newImageGallery(_ sender: Any) {
         let imageGallerytitles = data.getImageGalleryTitles()
@@ -20,6 +21,22 @@ class ImageGalleryTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func viewDidLoad() {
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(ImageGalleryTableViewController.makeTextFieldEditable))
+        doubleTapGesture.numberOfTapsRequired = 2
+        tableView.addGestureRecognizer(doubleTapGesture)
+    }
+    
+    @objc func makeTextFieldEditable(recognizer: UIGestureRecognizer){
+        if recognizer.state == UIGestureRecognizer.State.ended{
+            let locationInView = recognizer.location(in: self.tableView)
+            if let tapIndexPath = self.tableView.indexPathForRow(at: locationInView){
+                if let tappedCell = self.tableView.cellForRow(at: tapIndexPath) as? GalleryTableViewCell{
+                    tappedCell.textField.isEnabled = true
+                }
+            }
+        }
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -39,11 +56,19 @@ class ImageGalleryTableViewController: UITableViewController {
         return rows
     }
 
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.isEnabled = false
+        data.imageGalleries[data.currentGallery].title = textField.text!
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath) as! GalleryTableViewCell
         switch indexPath.section{
         case 0:
-            cell.textLabel?.text = data.imageGalleries[indexPath.row].title
+            cell.textField.delegate = self
+            cell.textField.isEnabled = false
+            cell.name = data.imageGalleries[indexPath.row].title
+            cell.textLabel?.text = ""
         case 1:
             cell.textLabel?.text = data.deletedImageGalleries[indexPath.row].title
         default: break
@@ -80,6 +105,11 @@ class ImageGalleryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if currentCell != indexPath{
+            let currentcell = tableView.cellForRow(at: indexPath) as? GalleryTableViewCell
+            currentcell?.textField.endEditing(true)
+        }
+        currentCell = indexPath
         if indexPath.section == 0{
             data.currentGallery = indexPath.row
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
