@@ -14,6 +14,8 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
 
     var data = ImageGalleryData.shared()
     var imageFetcher: ImageFetcher!
+    var newZoomScale: CGFloat?
+    var currentItemSize: CGSize?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +26,37 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
         self.collectionView!.addInteraction(UIDropInteraction(delegate: self))
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateGalleryCollectionView), name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
+        
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(UIImageCollectionViewController.scaleCollectionViewCells))
+        collectionView.addGestureRecognizer(pinchGesture)
     }
+    
+    @objc func scaleCollectionViewCells(gesture: UIPinchGestureRecognizer){
+        if gesture.state == UIPinchGestureRecognizer.State.began{
+            gesture.scale = 1.0
+            if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+                currentItemSize = flowLayout.itemSize
+            }
+        }else if gesture.state == UIPinchGestureRecognizer.State.changed{
+            newZoomScale = gesture.scale
+        }else if gesture.state == UIPinchGestureRecognizer.State.ended{
+            let layout = UICollectionViewFlowLayout()
+            layout.itemSize = CGSize(width: currentItemSize!.width * newZoomScale!, height: currentItemSize!.height * newZoomScale!)
+            collectionView.setCollectionViewLayout(layout, animated: true)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        var newSize = layout?.itemSize
+        if let zoom = newZoomScale{
+            newSize = CGSize(width: (newSize?.width)! * zoom, height: (newSize?.height)! * zoom)
+            newZoomScale = nil
+        }
+        return newSize!
+    }
+    
     
     @objc func updateGalleryCollectionView(notification: NSNotification){
         self.collectionView!.reloadData()
