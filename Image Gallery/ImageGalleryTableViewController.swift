@@ -19,7 +19,16 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
         let newTitle = "Image Gallery".madeUnique(withRespectTo: imageGallerytitles)
         data.imageGalleries.append( ImageGallery(title: newTitle) )
         deselectCurrentImageGallery()
-        tableView.reloadData()
+        let numberOfRowsInSection0 = tableView.numberOfRows(inSection: 0)
+        var rowToInsert: IndexPath?
+        if numberOfRowsInSection0 == 0{
+            rowToInsert = IndexPath(row:  0, section: 0)
+        }else if numberOfRowsInSection0 > 0{
+            rowToInsert = IndexPath(row:  numberOfRowsInSection0, section: 0)
+        }
+        if let row = rowToInsert{
+            tableView.insertRows(at: [row], with: UITableView.RowAnimation.left)
+        }
     }
     
     override func viewDidLoad() {
