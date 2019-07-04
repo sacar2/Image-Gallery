@@ -10,7 +10,11 @@ import UIKit
 
 private let reuseIdentifier = "PhotoCell"
 
-class UIImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate {
+class UIImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate, ImageGalleryTableViewControllerDelegate {
+    
+    func reloadCollectionViewArea() {
+        self.collectionView!.reloadData()
+    }
 
     var data = ImageGalleryData.shared()
     var imageFetcher: ImageFetcher!
@@ -112,14 +116,24 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         var itemsInCollection = 0
-        itemsInCollection = data.imageGalleries[data.currentGallery].images.count
+        if data.currentGallery == nil{
+            collectionView.backgroundView = nil
+        }else {
+            if let currentGallery = data.currentGallery{
+                if data.imageGalleries[currentGallery].images.count > 0{
+                itemsInCollection = data.imageGalleries[currentGallery].images.count
+                }
+            }
+        }
         return itemsInCollection
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
-        let (_, imageForCell) = data.imageGalleries[data.currentGallery].images[indexPath.row]
-        cell.imageView.image = imageForCell
+        if data.currentGallery != nil{
+            let (_, imageForCell) = data.imageGalleries[data.currentGallery!].images[indexPath.row]
+            cell.imageView.image = imageForCell
+        }
         return cell
     }
 

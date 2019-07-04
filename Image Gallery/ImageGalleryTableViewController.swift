@@ -11,13 +11,14 @@ import UIKit
 class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegate {
 
     var data = ImageGalleryData.shared()
-    
     var currentCell: IndexPath? = nil
-    
+    weak var delegate: ImageGalleryTableViewControllerDelegate?
+
     @IBAction func newImageGallery(_ sender: Any) {
         let imageGallerytitles = data.getImageGalleryTitles()
         let newTitle = "Image Gallery".madeUnique(withRespectTo: imageGallerytitles)
         data.imageGalleries.append( ImageGallery(title: newTitle) )
+        deselectCurrentImageGallery()
         tableView.reloadData()
     }
     
@@ -37,6 +38,13 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
             }
         }
     }
+    
+    func deselectCurrentImageGallery(){
+        currentCell = nil
+        data.currentGallery = nil
+        delegate?.reloadCollectionViewArea()
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -58,7 +66,15 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.isEnabled = false
-        data.imageGalleries[data.currentGallery].title = textField.text!
+        if data.currentGallery != nil{
+            data.imageGalleries[data.currentGallery!].title = textField.text!
+        }
+        deselectCurrentImageGallery()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -97,6 +113,9 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
             let undeleteAction = UIContextualAction(style: .normal, title: "Undelete Action", handler: {(ac: UIContextualAction, view: UIView, success:(Bool) -> Void) in
                 self.data.undeleteImageGallery(atIndex: indexPath.row)
                 tableView.moveRow(at: indexPath, to: NSIndexPath(row: self.data.imageGalleries.count-1, section: 0) as IndexPath)
+                if self.currentCell != nil{
+                    self.deselectCurrentImageGallery()
+                }
                 tableView.reloadData()
                 success(true)
             })
@@ -127,6 +146,7 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
                 data.permanentlyDeleteImageGallery(atIndex: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.top)
             }
+            deselectCurrentImageGallery()
             tableView.reloadData()
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -156,4 +176,8 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
         // Pass the selected object to the new view controller.
     }
 
+}
+
+protocol ImageGalleryTableViewControllerDelegate: AnyObject {
+    func reloadCollectionViewArea()
 }

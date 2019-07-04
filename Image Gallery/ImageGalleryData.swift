@@ -12,11 +12,7 @@ class ImageGalleryData{
     private static var sharedImageGalleryData: ImageGalleryData?
     var imageGalleries: [ImageGallery] = []
     private(set) var deletedImageGalleries: [ImageGallery] = []
-    var currentGallery: Int = 0
-    
-    private init() {
-        imageGalleries.append(ImageGallery(title: "Image Gallery"))
-    }
+    var currentGallery: Int?
     
     static func shared() -> ImageGalleryData {
         if sharedImageGalleryData == nil {
@@ -33,7 +29,9 @@ class ImageGalleryData{
     }
     
     func addImageToGallery(url: URL, image: UIImage){
-        imageGalleries[currentGallery].images.append((url, image))
+        if currentGallery != nil{
+            imageGalleries[currentGallery!].images.append((url, image))
+        }
     }
     
     func deleteImageGallery(atIndex index: Int){
