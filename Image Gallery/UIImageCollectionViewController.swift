@@ -137,6 +137,18 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
         return cell
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //get the cell that causes the segue and the index path for it
+//        if let cell = sender as? ImageCollectionViewCell, let indexPath = self.collectionView.indexPath(for: cell){
+        if let cell = sender as? ImageCollectionViewCell, let indexPath = collectionView.indexPath(for: cell){
+            let SeguedNavigationController = segue.destination as? UINavigationController
+            let detailViewController = SeguedNavigationController?.viewControllers[0] as? ImageViewController
+            if let vc = detailViewController{
+                vc.dataIndex = indexPath
+            }
+        }
+    }
+    
     // MARK: UICollectionViewDelegate
 
     /*

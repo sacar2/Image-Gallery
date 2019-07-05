@@ -17,8 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         guard let splitViewController = window?.rootViewController as? UISplitViewController,
             let masterNavigationController = splitViewController.viewControllers.first as? UINavigationController,
-            let masterViewController = masterNavigationController.viewControllers.first as? ImageGalleryTableViewController,
-            let detailViewController = splitViewController.viewControllers.last as? UIImageCollectionViewController
+            let masterViewController = masterNavigationController.viewControllers.first as? ImageGalleryTableViewController, let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
+            let detailViewController = detailNavigationController.viewControllers.first as? UIImageCollectionViewController
             else {fatalError()}
         masterViewController.delegate = detailViewController
         return true
