@@ -10,13 +10,14 @@ import UIKit
 
 class GalleryTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var textField: UITextField!
     var name: String = ""{
         didSet{
             textField.text = name
         }
     }
 
+    @IBOutlet weak var textField: UITextField!
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

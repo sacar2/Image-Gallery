@@ -11,6 +11,7 @@ import UIKit
 class ImageViewController: UIViewController {
 
     var dataIndex: IndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

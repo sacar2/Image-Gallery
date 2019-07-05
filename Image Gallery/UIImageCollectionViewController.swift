@@ -12,15 +12,11 @@ private let reuseIdentifier = "PhotoCell"
 
 class UIImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate, ImageGalleryTableViewControllerDelegate {
     
-    func reloadCollectionViewArea() {
-        self.collectionView!.reloadData()
-    }
-
     var data = ImageGalleryData.shared()
     var imageFetcher: ImageFetcher!
     var newZoomScale: CGFloat?
     var currentItemSize: CGSize?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,6 +29,10 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(UIImageCollectionViewController.scaleCollectionViewCells))
         collectionView.addGestureRecognizer(pinchGesture)
+    }
+    
+    func reloadCollectionViewArea() {
+        self.collectionView!.reloadData()
     }
     
     @objc func scaleCollectionViewCells(gesture: UIPinchGestureRecognizer){

@@ -9,9 +9,10 @@
 import UIKit
 
 class ImageGalleryData{
+    
     private static var sharedImageGalleryData: ImageGalleryData?
-    var imageGalleries: [ImageGallery] = []
     private(set) var deletedImageGalleries: [ImageGallery] = []
+    var imageGalleries: [ImageGallery] = []
     var currentGallery: Int?
     
     static func shared() -> ImageGalleryData {

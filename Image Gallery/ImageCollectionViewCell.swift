@@ -9,6 +9,7 @@
 import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
+    
     var backgroundImage: UIImage? {
         didSet{
             setNeedsDisplay()
