@@ -10,7 +10,7 @@ import UIKit
 
 private let reuseIdentifier = "PhotoCell"
 
-class UIImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate, ImageGalleryTableViewControllerDelegate {
+class ImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate, ImageGalleryTableViewControllerDelegate {
     
     var data = ImageGalleryData.shared()
     var imageFetcher: ImageFetcher!
@@ -27,7 +27,7 @@ class UIImageCollectionViewController: UICollectionViewController, UICollectionV
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateGalleryCollectionView), name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
         
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(UIImageCollectionViewController.scaleCollectionViewCells))
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(ImageCollectionViewController.scaleCollectionViewCells))
         collectionView.addGestureRecognizer(pinchGesture)
     }
     

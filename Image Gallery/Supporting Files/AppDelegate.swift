@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let splitViewController = window?.rootViewController as? UISplitViewController,
             let masterNavigationController = splitViewController.viewControllers.first as? UINavigationController,
             let masterViewController = masterNavigationController.viewControllers.first as? ImageGalleryTableViewController, let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
-            let detailViewController = detailNavigationController.viewControllers.first as? UIImageCollectionViewController
+            let detailViewController = detailNavigationController.viewControllers.first as? ImageCollectionViewController
             else {fatalError()}
         masterViewController.delegate = detailViewController
         return true
