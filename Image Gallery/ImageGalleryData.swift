@@ -29,9 +29,9 @@ class ImageGalleryData{
         return allTitles
     }
     
-    func addImageToGallery(url: URL, image: UIImage){
-        if currentGallery != nil{
-            imageGalleries[currentGallery!].images.append((url, image))
+    func addImageToGallery(withURL url: URL, withAspectRatio ratio: Double){
+        if let gallery = currentGallery{
+            imageGalleries[gallery].images.append(ImageGallery.ThumbImage(URL: url, aspectRatio: ratio))
         }
     }
     

@@ -75,36 +75,46 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        //let imagefetcher know i want the data, let it fetch the data, then call the closure.
-        
-        //this doesnt really fetch the image yet, closure is run after the items are fetched
-        imageFetcher = ImageFetcher(){ (url, image) in
-            DispatchQueue.main.async{
-                self.data.addImageToGallery(url: url, image: image)            
-                self.collectionView!.reloadData()
-            }
-        }
-        //this fetches the images as a UIImage and as a URL to load
+        var urlStore : URL?
+        var imageRatio : Double?
+        //this fetches the images as a URL and adds it to the data model
         session.loadObjects(ofClass: NSURL.self){nsurls in
             if let url = nsurls.first as? URL{
-                self.imageFetcher.fetch(url)
+                DispatchQueue.main.async {[weak self] in
+                    urlStore = url
+                    if let ratio = imageRatio, let url = urlStore{
+                        self?.data.addImageToGallery(withURL: url, withAspectRatio: ratio)
+                    }
+                    self?.collectionView!.reloadData()
+                }
             }
         }
         session.loadObjects(ofClass: UIImage.self){images in
             if let image = images.first as? UIImage{
-                self.imageFetcher.backup = image
+                //do something with this image that was dropped
+                DispatchQueue.main.async {[weak self] in
+                    imageRatio = Double(image.size.height) / Double(image.size.width)
+                    if let ratio = imageRatio, let url = urlStore{
+                        self?.data.addImageToGallery(withURL: url, withAspectRatio: ratio)
+                    }
+                }
             }
         }
     }
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
+ 
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //get the cell that causes the segue and the index path for it
+        if let cell = sender as? ImageCollectionViewCell, let indexPath = collectionView.indexPath(for: cell){
+             let seguedNavigationController = segue.destination as? ImageViewController
+             if let vc = seguedNavigationController, let gallery = data.currentGallery{
+                vc.imageURL = data.imageGalleries[gallery].images[indexPath.item].URL
+             }
+        }
+     }
+ 
 
     // MARK: UICollectionViewDataSource
 
@@ -129,24 +139,30 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageCollectionViewCell
         if data.currentGallery != nil{
-            let (_, imageForCell) = data.imageGalleries[data.currentGallery!].images[indexPath.row]
-            cell.imageView.image = imageForCell
+            let imageURL = data.imageGalleries[data.currentGallery!].images[indexPath.row].URL
+            cell.imageURL = imageURL.imageURL
         }
         return cell
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //get the cell that causes the segue and the index path for it
-//        if let cell = sender as? ImageCollectionViewCell, let indexPath = self.collectionView.indexPath(for: cell){
-        if let cell = sender as? ImageCollectionViewCell, let indexPath = collectionView.indexPath(for: cell){
-            let SeguedNavigationController = segue.destination as? UINavigationController
-            let detailViewController = SeguedNavigationController?.viewControllers[0] as? ImageViewController
-            if let vc = detailViewController{
-                vc.dataIndex = indexPath
-            }
+    override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        if let gallery = data.currentGallery{
+            var currentGalleryImages = data.imageGalleries[gallery].images
+            let itemToMove = currentGalleryImages[sourceIndexPath.item]
+            collectionView.performBatchUpdates({
+                //update model
+                currentGalleryImages.remove(at: sourceIndexPath.item)
+                currentGalleryImages.insert(itemToMove, at: destinationIndexPath.item)
+                //update collectionview
+                collectionView.reloadData()
+            })
         }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
     // MARK: UICollectionViewDelegate

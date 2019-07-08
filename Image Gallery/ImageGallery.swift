@@ -11,7 +11,12 @@ import UIKit
 struct ImageGallery{
     
     var title: String
-    var images: [(URL, UIImage)]
+    struct ThumbImage{
+        var URL : URL
+        var aspectRatio : Double
+    }
+    
+    var images: [ThumbImage] //aspect ratio will be width/height as a double
     
     init(title: String){
         self.title = title

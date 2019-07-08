@@ -168,6 +168,9 @@
                         <viewLayoutGuide key="safeArea" id="8Ct-Ny-D0M"/>
                     </view>
                     <navigationItem key="navigationItem" id="UCM-CU-qal"/>
+                    <connections>
+                        <outlet property="scrollView" destination="SvO-hw-UEV" id="1HN-bJ-cY9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nCx-tM-7Ds" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

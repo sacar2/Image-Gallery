@@ -8,14 +8,48 @@
 
 import UIKit
 
-class ImageViewController: UIViewController {
+class ImageViewController: UIViewController, UIScrollViewDelegate {
 
-    var dataIndex: IndexPath?
+    var imageView = UIImageView()
+    var imageURL: URL?{
+        didSet{
+            imageView.image = nil
+            fetchImage()
+        }
+    }
+    var image: UIImage?{
+        didSet{
+            imageView.image = image
+            imageView.sizeToFit() //resize the imageView to fit the image
+            scrollView?.contentSize = imageView.frame.size //reisze the content size of the scrollview to fit the imageView
+        }
+    }
     
+    @IBOutlet weak var scrollView: UIScrollView!{
+        didSet{
+            scrollView.minimumZoomScale = 0.1
+            scrollView.maximumZoomScale = 5.0
+            scrollView.delegate = self as UIScrollViewDelegate
+            scrollView.addSubview(imageView)
+            scrollView.isScrollEnabled = true
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    }
+    
+    private func fetchImage(){
+        guard let url = imageURL else{ return }
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard let imageData = try? Data(contentsOf: url) else { return }
+            //url may have changed because this is an asynchronous call!
+            DispatchQueue.main.async { [weak self] in
+                if url == self?.imageURL{
+                    self?.image = UIImage(data: imageData)
+                }
+            }
+        }
     }
     
 
