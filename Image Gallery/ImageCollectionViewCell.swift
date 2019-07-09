@@ -10,13 +10,12 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
-//    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var imageURL: URL?{
         didSet{
             imageView.image = nil
             if imageView.window != nil{
-//                activityIndicator.startAnimating()
                 fetchImage()
             }
         }
@@ -25,17 +24,16 @@ class ImageCollectionViewCell: UICollectionViewCell {
     func fetchImage(){
         guard let url = imageURL else { return }
         // if the imageURL isn't nil aynchronolsly on the global userInitiated queue, get the data of the url
+        activityIndicator.startAnimating()
         DispatchQueue.global(qos: .userInitiated).async{
             guard let imageData = try? Data(contentsOf: url) else {
-                print("NODATA")
+                print("NO DATA RETRIEVED")
                 return
             }
-            //after the data is retrieved, onthe main queue, set the image of the image view with the retrieved imageData
+            //after the data is retrieved, on the main queue, set the image of the image view with the retrieved imageData
             DispatchQueue.main.async { [weak self] in
-//                if url == self?.imageURL{
                     self?.imageView.image = UIImage(data: imageData)
-//                    self?.activityIndicator.stopAnimating()
-//                }
+                    self?.activityIndicator.stopAnimating()
             }
         }
     }

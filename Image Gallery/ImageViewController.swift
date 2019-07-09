@@ -14,7 +14,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     var imageURL: URL?{
         didSet{
             imageView.image = nil
-            fetchImage()
         }
     }
     var image: UIImage?{
@@ -25,6 +24,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!{
         didSet{
             scrollView.minimumZoomScale = 0.1
@@ -37,16 +37,19 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchImage()
     }
     
     private func fetchImage(){
         guard let url = imageURL else{ return }
+        activityIndicator.startAnimating()
         DispatchQueue.global(qos: .userInitiated).async {
             guard let imageData = try? Data(contentsOf: url) else { return }
             //url may have changed because this is an asynchronous call!
             DispatchQueue.main.async { [weak self] in
                 if url == self?.imageURL{
                     self?.image = UIImage(data: imageData)
+                    self?.activityIndicator.stopAnimating()
                 }
             }
         }
