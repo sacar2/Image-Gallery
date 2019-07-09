@@ -29,7 +29,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
             guard let imageData = try? Data(contentsOf: url) else {
                 print("NODATA")
                 return
-                
             }
             //after the data is retrieved, onthe main queue, set the image of the image view with the retrieved imageData
             DispatchQueue.main.async { [weak self] in

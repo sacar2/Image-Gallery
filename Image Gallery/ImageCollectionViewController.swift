@@ -82,10 +82,7 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
             if let url = nsurls.first as? URL{
                 DispatchQueue.main.async {[weak self] in
                     urlStore = url
-                    if let ratio = imageRatio, let url = urlStore{
-                        self?.data.addImageToGallery(withURL: url, withAspectRatio: ratio)
-                    }
-                    self?.collectionView!.reloadData()
+                    self?.addImageToData(withImageURL: urlStore, withAspectRatio: imageRatio)
                 }
             }
         }
@@ -94,11 +91,16 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
                 //do something with this image that was dropped
                 DispatchQueue.main.async {[weak self] in
                     imageRatio = Double(image.size.height) / Double(image.size.width)
-                    if let ratio = imageRatio, let url = urlStore{
-                        self?.data.addImageToGallery(withURL: url, withAspectRatio: ratio)
-                    }
+                    self?.addImageToData(withImageURL: urlStore, withAspectRatio: imageRatio)
                 }
             }
+        }
+    }
+    
+    func addImageToData(withImageURL url: URL?, withAspectRatio ratio: Double?){
+        if let aspectRatio = ratio, let imageUrl = url{
+            self.data.addImageToGallery(withURL: imageUrl.imageURL, withAspectRatio: aspectRatio)
+            self.collectionView!.reloadData()
         }
     }
     
