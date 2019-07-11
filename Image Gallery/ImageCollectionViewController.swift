@@ -20,9 +20,6 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         self.collectionView!.addInteraction(UIDropInteraction(delegate: self))
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateGalleryCollectionView), name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
@@ -31,7 +28,7 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
         collectionView.addGestureRecognizer(pinchGesture)
     }
     
-    func reloadCollectionViewArea() {
+    @objc func updateGalleryCollectionView(notification: NSNotification){
         self.collectionView!.reloadData()
     }
     
@@ -51,6 +48,11 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
         }
     }
     
+    //MARK: ImageGalleryTableViewControllerDelegate Methods
+    func reloadCollectionViewArea() {
+        self.collectionView!.reloadData()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         var newSize = layout?.itemSize
@@ -61,11 +63,7 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
         return newSize!
     }
     
-    
-    @objc func updateGalleryCollectionView(notification: NSNotification){
-        self.collectionView!.reloadData()
-    }
-
+    //MARK: UIDropInteractionDelegate Methods
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
     }
@@ -77,7 +75,7 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         var urlStore : URL?
         var imageRatio : Double?
-        //this fetches the images as a URL and adds it to the data model
+        //fetch the images as a URL and add it to the data model
         session.loadObjects(ofClass: NSURL.self){nsurls in
             if let url = nsurls.first as? URL{
                 DispatchQueue.main.async {[weak self] in
@@ -90,7 +88,7 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
             if let image = images.first as? UIImage{
                 //do something with this image that was dropped
                 DispatchQueue.main.async {[weak self] in
-                    imageRatio = Double(image.size.height) / Double(image.size.width)
+                    imageRatio = Double(image.size.width) / Double(image.size.height)
                     self?.addImageToData(withImageURL: urlStore, withAspectRatio: imageRatio)
                 }
             }
@@ -110,10 +108,11 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //get the cell that causes the segue and the index path for it
         if let cell = sender as? ImageCollectionViewCell, let indexPath = collectionView.indexPath(for: cell){
-             let seguedNavigationController = segue.destination as? ImageViewController
-             if let vc = seguedNavigationController, let gallery = data.currentGallery{
+            let seguedNavigationController = segue.destination as? ImageViewController
+            if let vc = seguedNavigationController, let gallery = data.currentGallery{
                 vc.imageURL = data.imageGalleries[gallery].images[indexPath.item].URL
-             }
+                vc.aspectRatio = data.imageGalleries[gallery].images[indexPath.item].aspectRatio
+            }
         }
      }
  
@@ -197,7 +196,5 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     
     }
     */
-    
-    
 
 }
