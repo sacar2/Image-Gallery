@@ -87,12 +87,10 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
 
                 if scrollViewRatio < imageViewRatio{
                     //if image is wider than the scrollview given the aspect ratio, set the heights the same.
-                    print("image is wider than the scrollview given the aspect ratio")
                     height = scrollHeight
                     width = height * imageViewRatio
                 }else{
                     //if image is longer than the scrollview given the aspect ratio, set the width the same.
-                    print("if image is longer than the scrollview given the aspect ratio, set the width the same.")
                     width = scrollWidth
                     height = width / imageViewRatio
                 }
@@ -101,12 +99,10 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
                 
                 if scrollViewRatio < imageViewRatio{
                     //if image is wider than the scrollview given the aspect ratio, set the widths the same.
-                    print("image is wider than the scrollview given the aspect ratio")
                     width = scrollWidth
                     height = width / imageViewRatio
                 }else{
                     //if image is lengthier than the scrollview given the aspect ratio, set the heights the same
-                    print("image is lengthier than the scrollview given the aspect ratio")
                     height = scrollHeight
                     width = height * imageViewRatio
                 }

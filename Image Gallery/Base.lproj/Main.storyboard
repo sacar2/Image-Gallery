@@ -166,7 +166,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SvO-hw-UEV">
                                 <rect key="frame" x="0.0" y="74" width="834" height="1100"/>
                                 <subviews>
-                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="lyF-aX-WgI">
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="lyF-aX-WgI">
                                         <rect key="frame" x="398.5" y="531.5" width="37" height="37"/>
                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </activityIndicatorView>
@@ -179,10 +179,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="8Ct-Ny-D0M" firstAttribute="bottom" secondItem="SvO-hw-UEV" secondAttribute="bottom" id="3QI-RE-ahc"/>
-                            <constraint firstItem="SvO-hw-UEV" firstAttribute="top" secondItem="8Ct-Ny-D0M" secondAttribute="top" id="P6s-EA-dQw"/>
-                            <constraint firstItem="8Ct-Ny-D0M" firstAttribute="trailing" secondItem="SvO-hw-UEV" secondAttribute="trailing" id="XH8-ws-rwy"/>
-                            <constraint firstItem="SvO-hw-UEV" firstAttribute="leading" secondItem="8Ct-Ny-D0M" secondAttribute="leading" id="jez-gM-Vz0"/>
+                            <constraint firstItem="8Ct-Ny-D0M" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="SvO-hw-UEV" secondAttribute="bottom" priority="500" id="3QI-RE-ahc"/>
+                            <constraint firstItem="SvO-hw-UEV" firstAttribute="top" relation="lessThanOrEqual" secondItem="8Ct-Ny-D0M" secondAttribute="top" priority="500" id="P6s-EA-dQw"/>
+                            <constraint firstItem="8Ct-Ny-D0M" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="SvO-hw-UEV" secondAttribute="trailing" priority="500" id="XH8-ws-rwy"/>
+                            <constraint firstItem="SvO-hw-UEV" firstAttribute="centerY" secondItem="8Ct-Ny-D0M" secondAttribute="centerY" id="av3-dt-wgZ"/>
+                            <constraint firstItem="SvO-hw-UEV" firstAttribute="leading" relation="lessThanOrEqual" secondItem="8Ct-Ny-D0M" secondAttribute="leading" priority="500" id="jez-gM-Vz0"/>
+                            <constraint firstItem="SvO-hw-UEV" firstAttribute="centerX" secondItem="8Ct-Ny-D0M" secondAttribute="centerX" id="wrs-cf-dFK"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8Ct-Ny-D0M"/>
                     </view>

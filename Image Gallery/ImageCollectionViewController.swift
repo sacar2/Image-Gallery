@@ -100,7 +100,9 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
             self.data.addImageToGallery(withURL: imageUrl.imageURL, withAspectRatio: aspectRatio)
             if let gallery = self.data.currentGallery{
                 let count = self.data.imageGalleries[gallery].images.count
-                self.collectionView!.insertItems(at: [IndexPath(item: count - 1, section: 0)])
+                let newIndex = [IndexPath(item: count - 1, section: 0)]
+                self.collectionView!.insertItems(at: newIndex)
+                self.collectionView!.reloadItems(at: newIndex)
             }
         }
     }
