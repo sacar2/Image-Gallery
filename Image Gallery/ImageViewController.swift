@@ -48,6 +48,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     }
 
     //MARK: Methods
+    
     private func fetchImage(){
         guard let url = imageURL else{ return }
         activityIndicator.startAnimating()

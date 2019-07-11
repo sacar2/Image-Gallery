@@ -98,7 +98,10 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     func addImageToData(withImageURL url: URL?, withAspectRatio ratio: Double?){
         if let aspectRatio = ratio, let imageUrl = url{
             self.data.addImageToGallery(withURL: imageUrl.imageURL, withAspectRatio: aspectRatio)
-            self.collectionView!.reloadData()
+            if let gallery = self.data.currentGallery{
+                let count = self.data.imageGalleries[gallery].images.count
+                self.collectionView!.insertItems(at: [IndexPath(item: count - 1, section: 0)])
+            }
         }
     }
     
