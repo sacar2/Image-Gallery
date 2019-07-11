@@ -21,7 +21,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         didSet{
             imageView.image = image
             imageView.sizeToFit() //resize the imageView to fit the image
-            scrollView?.contentSize = imageView.frame.size //reisze the content size of the scrollview to fit the imageView
+            scrollView?.contentSize = imageView.frame.size //resize the content size of the scrollview to fit the imageView
         }
     }
     
@@ -53,7 +53,10 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         guard let url = imageURL else{ return }
         activityIndicator.startAnimating()
         DispatchQueue.global(qos: .userInitiated).async {
-            guard let imageData = try? Data(contentsOf: url) else { return }
+            guard let imageData = try? Data(contentsOf: url) else {
+                print("NO DATA RETRIEVED")
+                return
+            }
             //url may have changed because this is an asynchronous call!
             DispatchQueue.main.async { [weak self] in
                 if url == self?.imageURL{
@@ -76,18 +79,38 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     func getImageDimensions(fromScrollWidth scrollWidth: CGFloat, scrollHeight: CGFloat) -> (CGFloat, CGFloat){
         var width: CGFloat = 0
         var height: CGFloat = 0
-        
-        if scrollWidth < scrollHeight{
-            width = scrollWidth
-        }else{
-            height = scrollHeight
-        }
-        
+        let scrollViewRatio = scrollWidth / scrollHeight
         if let ratio = aspectRatio{
-            if ratio >= 1, width > 0{
-                height = width / CGFloat(ratio)
-            }else if height > 0 {
-                width = height * CGFloat(ratio)
+            let imageViewRatio = CGFloat(ratio)
+
+            if scrollViewRatio >= 1{ //scrollview is landscape
+
+                if scrollViewRatio < imageViewRatio{
+                    //if image is wider than the scrollview given the aspect ratio, set the heights the same.
+                    print("image is wider than the scrollview given the aspect ratio")
+                    height = scrollHeight
+                    width = height * imageViewRatio
+                }else{
+                    //if image is longer than the scrollview given the aspect ratio, set the width the same.
+                    print("if image is longer than the scrollview given the aspect ratio, set the width the same.")
+                    width = scrollWidth
+                    height = width / imageViewRatio
+                }
+                
+            }else{ //scrollview is portrait (ratio <1)
+                
+                if scrollViewRatio < imageViewRatio{
+                    //if image is wider than the scrollview given the aspect ratio, set the widths the same.
+                    print("image is wider than the scrollview given the aspect ratio")
+                    width = scrollWidth
+                    height = width / imageViewRatio
+                }else{
+                    //if image is lengthier than the scrollview given the aspect ratio, set the heights the same
+                    print("image is lengthier than the scrollview given the aspect ratio")
+                    height = scrollHeight
+                    width = height * imageViewRatio
+                }
+                
             }
         }
         return (width, height)
