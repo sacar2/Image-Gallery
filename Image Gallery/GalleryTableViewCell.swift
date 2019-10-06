@@ -15,7 +15,8 @@ class GalleryTableViewCell: UITableViewCell {
             textField.text = name
         }
     }
-
+    
+    //use a textfield and not a text label because it needs to be editable
     @IBOutlet weak var textField: UITextField!
     
     override func setSelected(_ selected: Bool, animated: Bool) {

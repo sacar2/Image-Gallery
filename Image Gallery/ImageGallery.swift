@@ -13,10 +13,10 @@ struct ImageGallery{
     var title: String
     struct ThumbImage{
         var URL : URL
-        var aspectRatio : Double
+        var aspectRatio : Double //aspect ratio is width/height as a double
     }
     
-    var images: [ThumbImage] //aspect ratio will be width/height as a double
+    var images: [ThumbImage]
     
     init(title: String){
         self.title = title

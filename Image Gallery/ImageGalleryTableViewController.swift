@@ -78,7 +78,6 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
         if data.currentGallery != nil{
             data.imageGalleries[data.currentGallery!].title = textField.text!
         }
-        deselectCurrentImageGallery()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -93,9 +92,6 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
             cell.textField.delegate = self
             cell.textField.isEnabled = false
             cell.name = data.imageGalleries[indexPath.row].title
-            cell.textLabel?.text = ""
-        case 1:
-            cell.textLabel?.text = data.deletedImageGalleries[indexPath.row].title
         default: break
         }
         return cell

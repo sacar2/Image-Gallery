@@ -155,12 +155,13 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
 
     override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let gallery = data.currentGallery{
-            var currentGalleryImages = data.imageGalleries[gallery].images
-            let itemToMove = currentGalleryImages[sourceIndexPath.item]
+//            var currentGalleryImages = data.imageGalleries[gallery].images
+//            let itemToMove = currentGalleryImages[sourceIndexPath.item]
             collectionView.performBatchUpdates({
+                print("moved image")
                 //update model
-                currentGalleryImages.remove(at: sourceIndexPath.item)
-                currentGalleryImages.insert(itemToMove, at: destinationIndexPath.item)
+                let itemToMove = data.imageGalleries[gallery].images.remove(at: sourceIndexPath.item)
+                data.imageGalleries[gallery].images.insert(itemToMove, at: destinationIndexPath.item)
                 //update collectionview
                 collectionView.reloadData()
             })
