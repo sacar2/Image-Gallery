@@ -13,7 +13,6 @@ private let reuseIdentifier = "PhotoCell"
 class ImageCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIDropInteractionDelegate, ImageGalleryTableViewControllerDelegate {
     
     var data = ImageGalleryData.shared()
-    var imageFetcher: ImageFetcher!
     var newZoomScale: CGFloat?
     var currentItemSize: CGSize?
 
@@ -56,10 +55,18 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         var newSize = layout?.itemSize
-        if let zoom = newZoomScale{
-            newSize = CGSize(width: (newSize?.width)! * zoom, height: (newSize?.height)! * zoom)
-            newZoomScale = nil
+        var imageRatio: CGFloat = 1.0
+        if let currentGallery = data.currentGallery {
+            imageRatio = CGFloat(data.imageGalleries[currentGallery].images[indexPath.row].aspectRatio)
         }
+        let cellHeight = newSize!.width / imageRatio
+        if let zoom = newZoomScale{
+            newSize = CGSize(width: (newSize?.width)! * zoom, height: cellHeight * zoom)
+            newZoomScale = nil
+        }else{
+            newSize = CGSize(width: (newSize?.width)!, height: cellHeight)
+        }
+        print(newSize!)
         return newSize!
     }
     
@@ -77,7 +84,9 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
         var imageRatio : Double?
         //fetch the images as a URL and add it to the data model
         session.loadObjects(ofClass: NSURL.self){nsurls in
+            //print("nsURLs loaded")
             if let url = nsurls.first as? URL{
+                //print("item loaded was infact a URL")
                 DispatchQueue.main.async {[weak self] in
                     urlStore = url
                     self?.addImageToData(withImageURL: urlStore, withAspectRatio: imageRatio)
@@ -85,9 +94,11 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
             }
         }
         session.loadObjects(ofClass: UIImage.self){images in
+            //print("images loaded")
             if let image = images.first as? UIImage{
                 //do something with this image that was dropped
                 DispatchQueue.main.async {[weak self] in
+                    //print("item loaded was infact an image")
                     imageRatio = Double(image.size.width) / Double(image.size.height)
                     self?.addImageToData(withImageURL: urlStore, withAspectRatio: imageRatio)
                 }
