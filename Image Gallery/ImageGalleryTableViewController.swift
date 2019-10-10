@@ -159,6 +159,13 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if splitViewController?.preferredDisplayMode != .primaryOverlay{
+            splitViewController?.preferredDisplayMode = .primaryOverlay
+        }
+    }
 
     /*
     // Override to support rearranging the table view.
