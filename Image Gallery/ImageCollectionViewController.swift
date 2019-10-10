@@ -25,10 +25,16 @@ class ImageCollectionViewController: UICollectionViewController, UICollectionVie
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(ImageCollectionViewController.scaleCollectionViewCells))
         collectionView.addGestureRecognizer(pinchGesture)
+        
+        let leftbarbuttonItem = splitViewController?.displayModeButtonItem
+        navigationItem.leftBarButtonItem = leftbarbuttonItem
     }
     
     @objc func updateGalleryCollectionView(notification: NSNotification){
         self.collectionView!.reloadData()
+        if let gallerySelected = data.currentGallery{
+            self.title = data.imageGalleries[gallerySelected].title
+        }
     }
     
     @objc func scaleCollectionViewCells(gesture: UIPinchGestureRecognizer){

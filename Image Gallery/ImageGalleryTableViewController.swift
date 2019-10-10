@@ -35,6 +35,7 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
         let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(ImageGalleryTableViewController.makeTextFieldEditable))
         doubleTapGesture.numberOfTapsRequired = 2
         tableView.addGestureRecognizer(doubleTapGesture)
+        self.title = "Galleries"
     }
     
     @objc func makeTextFieldEditable(recognizer: UIGestureRecognizer){
@@ -137,6 +138,7 @@ class ImageGalleryTableViewController: UITableViewController, UITextFieldDelegat
         if indexPath.section == 0{
             data.currentGallery = indexPath.row
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "selectedGallery"), object: nil)
+            self.splitViewController?.preferredDisplayMode = UISplitViewController.DisplayMode.primaryHidden
         }
     }
 
